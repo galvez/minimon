@@ -18,14 +18,8 @@ chokidar
     ignored: config.ignored,
   })
   .on('all', () => {
-    ee.emit('restart')
+    restart()
   })
-
-ee.on('restart', async () => {
-  node.catch(() => start())
-  node.kill()
-  console.log('ℹ restarting')
-})
 
 await start()
 
@@ -41,6 +35,12 @@ async function start () {
   } catch {
     // No need to do anything as zx will print the original stderr
   }
+}
+
+function restart () {
+  node.catch(() => start())
+  node.kill()
+  console.log('ℹ restarting')
 }
 
 async function loadConfig () {
